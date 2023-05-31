@@ -7,7 +7,7 @@ int almost4Inches = 916; // 4x4 hoop
 
 // project details
 String projectTitle = "reaction_diffusion_bitmap";
-String bmpFileName = "./may_30/png/4-invert-1.png"; // b&w bitmap
+String bmpFileName = "./may_31/2.png"; // b&w bitmap
 // String photoFileName = ""; // photo for preview, if desired
 String photoFileName = null;
 
@@ -51,7 +51,7 @@ void draw(PImage bmp) {
   E.fill(0, 0, 0); 
   E.noStroke();
   E.hatchMode(PEmbroiderGraphics.CONCENTRIC);
-  E.hatchSpacing(5);
+  E.hatchSpacing(3);
 
   E.image(bmp, 0, 0, almost4Inches,almost4Inches);
 }
