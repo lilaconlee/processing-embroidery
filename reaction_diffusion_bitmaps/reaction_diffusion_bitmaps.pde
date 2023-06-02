@@ -7,7 +7,7 @@ int almost4Inches = 916; // 4x4 hoop
 
 // project details
 String projectTitle = "reaction_diffusion_bitmap";
-String bmpFileName = "./may_31/2.png"; // b&w bitmap
+String bmpFileName = "./may_31/3.png"; // b&w bitmap
 // String photoFileName = ""; // photo for preview, if desired
 String photoFileName = null;
 
