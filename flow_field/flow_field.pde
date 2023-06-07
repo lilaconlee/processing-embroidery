@@ -2,6 +2,9 @@ import java.util.Date;
 import processing.embroider.*;
 
 PEmbroiderGraphics E;
+FlowField flowfield;
+
+int[][] colors = {{255,0,0}, {255,127,0},{255,255,0},{0,255,0},{0,0,255},{75,0,130},{148,0,211}};
 
 void setup() {
   noLoop(); 
@@ -12,19 +15,18 @@ void setup() {
 
   //float mm = 10;
 
-  //int almost4Inches = 916;
-  size (1260, 1100);
+  size (1260, 1100); // M2
+  // size(500, 500); // M3
 
   E = new PEmbroiderGraphics(this, width, height);
   
-  String projectTitle = "machine_test";
+  String projectTitle = "flow_field";
   Date d = new Date();
   String fileName = "./output/" + projectTitle + "_" + d.getTime();
   
-  // JEF
+  flowfield = new FlowField();
+  
   String outputFilePath = jefSetup(fileName);
-  // SVG
-  // String outputFilePath = svgSetup(fileName);
   
   E.setPath(outputFilePath); 
   E.beginDraw(); 
@@ -33,24 +35,9 @@ void setup() {
   draw();
   
   E.optimize(); // slow, but good and important
-  E.visualize();
+  E.visualize(true,false,false); //show color
   E.endDraw(); // write out the file
   save(fileName + ".png");
-}
-
-// configures for svg, returns svg output file path
-public String svgSetup(String filename) {
-
-  // PLOTTER-SPECIFIC COMMANDS: 
-  // Set this to false so that there aren't superfluous waypoints on straight lines:
-  E.toggleResample(false);
-  // Set this to false so that there aren't connecting lines between shapes. 
-  // Note that you'll still be able to pre-visualize the connecting lines 
-  // (the plotter path) if you set E.visualize(true, true, true);
-  E.toggleConnectingLines(false);
-  // This affects the visual quality of inset/offset curves for CONCENTRIC fills:
-  E.CONCENTRIC_ANTIALIGN = 0.0;
-  return sketchPath(filename + ".svg");
 }
 
 // returns jef output file path
@@ -58,29 +45,67 @@ public String jefSetup(String filename) {
     return sketchPath(filename + ".jef");
 }
 
+// https://discourse.processing.org/t/flow-fields-code/34592/3
+// https://natureofcode.com/book/chapter-6-autonomous-agents/
+class FlowField {
+  PVector[][] field;
+  int cols, rows;
+  int resolution;
+  int offset;
+
+
+  FlowField() {
+    resolution = 30;
+    cols = width / resolution;
+    rows = height / resolution;
+    field = new PVector[cols][rows];
+
+    float xoff = 0;
+    for (int i = 0; i < cols; i++) {
+      float yoff = 0;
+      for (int j = 0; j < rows; j++) {
+        float theta = map(noise(xoff,yoff),0,1,0,TWO_PI);
+        field[i][j] = new PVector(cos(theta), sin(theta));
+        yoff += 0.1;
+      }
+      xoff += 0.1;
+    }
+  }
+
+  // Draw every vector
+  void display() {
+    for (int i = 0; i < cols; i++) {
+      int index = i%colors.length;
+      int[] c  = colors[index];
+      E.stroke(c[0], c[1], c[2]);
+      for (int j = 0; j < rows; j++) {
+        drawVector(field[i][j], i*resolution, j*resolution, resolution*5);
+      }
+    }
+  }//
+
+  // Renders a vector object 'v' as an arrow and a position 'x,y'
+  void drawVector(PVector v, float x, float y, float scayl) {
+    E.pushMatrix();
+    // Translate to position to render vector
+    E.translate(x, y);
+    // Call vector heading function to get direction (note that pointing to the right is a heading of 0) and rotate
+    E.rotate(v.heading2D());
+    // Calculate length of vector & scale it to be bigger or smaller if necessary
+    float len = v.mag()*scayl;
+
+    E.line(0, 0, len, 0);
+    E.popMatrix();
+  }
+}
+
 void draw() {
   E.noFill();
-  E.strokeWeight(44);
-  E.strokeSpacing(2.0);
-  E.setStitch(5,66,0);
-  E.PERPENDICULAR_STROKE_CAP_DENSITY_MULTIPLIER = 0.4;
-
-  E.strokeMode(E.ANGLED);
-
-  float ay = 50; 
-  int nCurves = 7;
-  for (int i=0; i<nCurves; i++) {
-    float ax = map(i, 0, (nCurves-1), 0+50, width-200-50);
-    float sa = map(i, 0, (nCurves-1), 30, -30); 
-    println(sa);
-    E.strokeAngleDeg(sa);
-    
-    E.stroke(0,0,i);
-
-    E.beginShape();
-    E.vertex(ax, ay);
-    E.quadraticVertex(ax+075, ay+025, ax+100, ay+200);
-    E.quadraticVertex(ax+125, ay+375, ax+200, ay+400);
-    E.endShape();
-  }
+  //E.strokeWeight(10);
+  //E.strokeSpacing(2);
+  //E.setStitch(5,66,0);
+  E.setStitch(1,2,0);
+  //E.PERPENDICULAR_STROKE_CAP_DENSITY_MULTIPLIER = 0.4;
+  
+  flowfield.display();
 }
