@@ -7,8 +7,8 @@ int almost4Inches = 916; // 4x4 hoop
 
 // project details
 String projectTitle = "physarum_bitmap";
-String bmpFileName = "jun_7_node_bw.png"; // b&w bitmap
-String photoFileName = "jun_7_node_color.png"; // photo for preview, if desired
+String bmpFileName = "jun_4_mistake.png"; // b&w bitmap
+String photoFileName = null; // photo for preview, if desired
 
 void setup() {
   noLoop(); 
