@@ -7,13 +7,20 @@ int almost4Inches = 916; // 4x4 hoop
 
 // project details
 String projectTitle = "physarum_bitmap";
-String bmpFileName = "jun_3_bw_1.png"; // b&w bitmap
-String photoFileName = "jun_2_color.jpeg"; // photo for preview, if desired
+String bmpFileName = "jun_7_node_bw.png"; // b&w bitmap
+String photoFileName = "jun_7_node_color.png"; // photo for preview, if desired
 
 void setup() {
   noLoop(); 
 
-  size (916, 916);
+  // M1: 240x200mm, 9.4x7.9in, 2400x2000
+  // M2: 126x110mm, 5x4.3in, 1260x1100
+  // M3: 50x50mm,  2x2in, 500x500
+
+  //float mm = 10;
+  size(2400, 2000); // M1
+  //size (1260, 1100); // M2
+  // size(500, 500); // M3
 
   E = new PEmbroiderGraphics(this, width, height);
   
@@ -25,7 +32,7 @@ void setup() {
   // load images
   if (photoFileName != null) {
     PImage photo = loadImage(photoFileName);
-    image(photo, 0, 0, almost4Inches,almost4Inches); 
+    image(photo, 0, 0, 2400,2000); 
   }
   PImage bmp = loadImage(bmpFileName);
   
@@ -43,7 +50,7 @@ void setup() {
 
 // returns pes output file path
 public String pesSetup(String filename) {
-    return sketchPath(filename + ".pes");
+    return sketchPath(filename + ".jef");
 }
 
 void draw(PImage bmp) {
@@ -57,5 +64,5 @@ void draw(PImage bmp) {
   E.hatchSpacing(2);
  // E.setStitch(5, 20, 1.0);
 
-  E.image(bmp, 0, 0, almost4Inches,almost4Inches);
+  E.image(bmp, 0, 0, 2400,2000);
 }
