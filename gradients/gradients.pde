@@ -51,28 +51,25 @@ void setup() {
 }
 
 void draw() {
-  int gradientSize = 100 * mm;
-  int stitchSize = mm/2;
-  int pad = 10;
-  
-  E.noFill();
-  
-  int xStart = pad;
-  int yStart = pad;
-  int chunk = gradientSize/colors.length;
-  //for(int i = yStart; i < gradientSize; i += stitchSize) {
-  //  for (int j = xStart; j < gradientSize; j += 2) {
-  //    setStroke(floor(i/chunk));
-  //    // x1, y1, x2, y2
-  //    E.line(j,i,j,i+stitchSize);
-  //  }
-  //}
+  int resolution = 20;
+  int cols = width/resolution;
+  float rows = height/resolution;
+  int colorChunkSize = ceil(rows/colors.length); // gotta be better name
 
-  for(int i = yStart; i < gradientSize; i += stitchSize) {
-    for (int j = gradientSize; j < gradientSize; j += 2) {
-      setStroke(floor(i/chunk));
-      // x1, y1, x2, y2
-      E.line(j,i,j,i+stitchSize);
+  E.noFill();
+  E.stroke(0,0,0);
+
+  for (int i = 0; i < cols; i++) {
+    for (int j = 0; j < rows; j++) {
+      int colorIndex = ceil(j/colorChunkSize);
+      setStroke(colorIndex);
+    
+      E.pushMatrix();
+      E.translate(i*resolution,j*resolution);
+      
+      float x = random(0,resolution);
+      E.line(x,0,x,resolution * 2);
+      E.popMatrix();
     }
   }
 }
