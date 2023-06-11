@@ -35,7 +35,7 @@ void setup() {
   draw();
   
   E.optimize(); // slow, but good and important
-  E.visualize(true,false,false); //show color
+  E.visualize(true,true,true); //show color
   E.endDraw(); // write out the file
   save(fileName + ".png");
 }
@@ -79,7 +79,7 @@ class FlowField {
       int[] c  = colors[index];
       E.stroke(c[0], c[1], c[2]);
       for (int j = 0; j < rows; j++) {
-        drawVector(field[i][j], i*resolution, j*resolution, resolution*5);
+        drawVector(field[i][j], i*resolution, j*resolution, resolution);
       }
     }
   }//
@@ -94,7 +94,9 @@ class FlowField {
     // Calculate length of vector & scale it to be bigger or smaller if necessary
     float len = v.mag()*scayl;
 
+    E.beginRepeatEnd(2);
     E.line(0, 0, len, 0);
+    E.endRepeatEnd();
     E.popMatrix();
   }
 }
