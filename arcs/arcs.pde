@@ -27,7 +27,7 @@ void setup() {
 
   E = new PEmbroiderGraphics(this, width, height);
   
-  String projectTitle = "boilerplate";
+  String projectTitle = "arcs";
   Date d = new Date();
   String fileName = "./output/" + projectTitle + "_" + d.getTime();
   
@@ -47,12 +47,13 @@ void setup() {
 }
 
 void draw() {
-  E.noFill(); 
+  E.noFill();
+  E.setStitch(10, 25, 0);
+  E.strokeWeight(1);
+
   int count = 100;
   for(int i = 0; i < count; i++) {
-    E.strokeWeight(ceil(random(0,5))); 
     setRandomStroke();
-    E.setStitch(0.2, random(1,10), random(0,1));
     int size = int(random(0,width));
     float start = random(0, TWO_PI);
     float end = random(0, TWO_PI);
