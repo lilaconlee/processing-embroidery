@@ -3,6 +3,7 @@ import processing.embroider.*;
 
 PEmbroiderGraphics E;
 
+int[][] colors = {{255,0,0}, {255,127,0},{255,255,0},{0,255,0},{0,0,255},{75,0,130},{148,0,211}};
 
 void settings() {
   // janome mb-7
@@ -16,8 +17,8 @@ void settings() {
 
   // float mm = 10; // machine unit size
   // size(2400, 2000); // M1
-  size (1260, 1100); // M2
-  // size(500, 500); // M3
+  // size (1260, 1100); // M2
+   size(500, 500); // M3
   // size (916, 916); // 4x4
 }
 
@@ -33,10 +34,6 @@ void setup() {
   String fileExt = "jef"; // jef, dst, pes, svg
   String outputFilePath = sketchPath(fileName + "." + fileExt);
 
-  if (fileExt == "svg") {
-    svgSetup();
-  }
-  
   E.setPath(outputFilePath); 
   E.beginDraw(); 
   E.clear();
@@ -49,21 +46,29 @@ void setup() {
   save(fileName + ".png");
 }
 
-void svgSetup() {
-  // PLOTTER-SPECIFIC COMMANDS: 
-  // Set this to false so that there aren't superfluous waypoints on straight lines:
-  E.toggleResample(false);
-  // Set this to false so that there aren't connecting lines between shapes. 
-  // Note that you'll still be able to pre-visualize the connecting lines 
-  // (the plotter path) if you set E.visualize(true, true, true);
-  E.toggleConnectingLines(false);
-  // This affects the visual quality of inset/offset curves for CONCENTRIC fills:
-  E.CONCENTRIC_ANTIALIGN = 0.0;
+void draw() {
+  E.noFill(); 
+  int count = 100;
+  for(int i = 0; i < count; i++) {
+    E.strokeWeight(ceil(random(0,5))); 
+    setRandomStroke();
+    E.setStitch(0.2, random(1,10), random(0,1));
+    int size = int(random(0,width));
+    float start = random(0, TWO_PI);
+    float end = random(0, TWO_PI);
+    // x, y, width, height, start (radians), stop (radians)
+    E.beginRepeatEnd(3);
+    E.arc(width/2, height/2, size, size, start, end);
+    E.endRepeatEnd();
+  }
 }
 
-void draw() {
-  E.strokeWeight(1); 
-  E.fill(0, 0, 0); 
-  E.noStroke(); 
-  E.circle (width/2, height/2, 150);
+void setRandomStroke() {
+  int colorIndex = floor(random(0,colors.length));
+  setStroke(colorIndex);
+}
+
+void setStroke(int colorIndex) {
+  int[] c = colors[colorIndex];
+  E.stroke(c[0],c[1],c[2]);
 }
