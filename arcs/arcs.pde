@@ -51,7 +51,7 @@ void draw() {
   E.setStitch(10, 25, 0);
   E.strokeWeight(1);
 
-  int count = 100;
+  int count = 300;
   for(int i = 0; i < count; i++) {
     setRandomStroke();
     int size = int(random(0,width));
