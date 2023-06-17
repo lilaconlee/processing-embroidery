@@ -42,7 +42,7 @@ void setup() {
 
 // returns jef output file path
 public String jefSetup(String filename) {
-    return sketchPath(filename + ".jef");
+    return sketchPath(filename + ".dst");
 }
 
 // https://discourse.processing.org/t/flow-fields-code/34592/3
@@ -75,11 +75,11 @@ class FlowField {
   // Draw every vector
   void display() {
     for (int i = 0; i < cols; i++) {
-      int index = i%colors.length;
-      int[] c  = colors[index];
-      E.stroke(c[0], c[1], c[2]);
       for (int j = 0; j < rows; j++) {
-        drawVector(field[i][j], i*resolution, j*resolution, resolution);
+        //int colorIndex = j%colors.length;
+        //setStroke(colorIndex);
+        float multiplier = random(1,5);
+        drawVector(field[i][j], i*resolution, j*resolution, resolution*multiplier);
       }
     }
   }//
@@ -93,6 +93,7 @@ class FlowField {
     E.rotate(v.heading2D());
     // Calculate length of vector & scale it to be bigger or smaller if necessary
     float len = v.mag()*scayl;
+    println(len);
 
     E.beginRepeatEnd(2);
     E.line(0, 0, len, 0);
@@ -105,9 +106,14 @@ void draw() {
   E.noFill();
   //E.strokeWeight(10);
   //E.strokeSpacing(2);
-  //E.setStitch(5,66,0);
-  E.setStitch(1,2,0);
+  E.setStitch(5,600,0);
+  //E.setStitch(1,2,0);
   //E.PERPENDICULAR_STROKE_CAP_DENSITY_MULTIPLIER = 0.4;
   
   flowfield.display();
+}
+
+void setStroke(int colorIndex) {
+  int[] c = colors[colorIndex];
+  E.stroke(c[0],c[1],c[2]);
 }
