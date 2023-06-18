@@ -101,22 +101,24 @@ void draw() {
     int colorIndex = getColorIndex(i,count);
     println(colorIndex);
     setStroke(colorIndex);
+    
+    float bobbleRate = 5;
+    float xoff = map(cos(i), -1, 1, 0, bobbleRate);
+    float yoff = map(sin(i), -1, 1, 0, bobbleRate);
+    float noise = noise(xoff, yoff);
+    float r = map(noise, 0, 1, 0, 300);
+
     for (float j = 0; j <= TWO_PI; j += PI/180) {
-      float bobbleRate = 5;
       //float noise = map(noise(cos(j),sin(j)),0,1,-maxNoise,maxNoise);
       //float r = random(i-5,i+5) + noise;
-      float xoff = map(cos(i), -1, 1, 0, bobbleRate);
-      float yoff = map(sin(i), -1, 1, 0, bobbleRate);
-      float noise = noise(xoff, yoff);
       //float noise = noise(cos(i),sin(i));
     
-      float r = map(noise, 0, 1, 0, 300);
-      println(r);
       float x = r * cos(j); 
       float y = r * sin(j);
 
       E.vertex(x, y);
     }
+    E.vertex(r*cos(1),r*sin(1));
     E.endShape();
   }
 }
