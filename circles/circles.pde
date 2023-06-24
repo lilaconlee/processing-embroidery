@@ -57,7 +57,7 @@ void setup() {
   Date d = new Date();
   String fileName = "./output/" + projectTitle + "_" + d.getTime();
   
-  String fileExt = "jef"; // jef, dst, pes, svg
+  String fileExt = "dst"; // jef, dst, pes, svg
   String outputFilePath = sketchPath(fileName + "." + fileExt);
 
   if (fileExt == "svg") {
@@ -93,24 +93,24 @@ void draw() {
   E.setStitch(10, 25, 0);
   E.translate(width/2, height/2);
   E.noFill();
+  int maxNoise = 15;
 
-  int maxNoise = 10;
-  int count = 40;
-  for (int i = 0; i < count; i++) {
+  int count = 101;
+  for (int i = 100; i < count; i++) {
     E.beginShape();
     int colorIndex = getColorIndex(i,count);
     println(colorIndex);
     setStroke(colorIndex);
     
-    float bobbleRate = 5;
-    float xoff = map(cos(i), -1, 1, 0, bobbleRate);
-    float yoff = map(sin(i), -1, 1, 0, bobbleRate);
-    float noise = noise(xoff, yoff);
-    float r = map(noise, 0, 1, 0, 300);
+    //float bobbleRate = 200;
+    //float xoff = map(cos(i), -1, 1, 0, bobbleRate);
+    //float yoff = map(sin(i), -1, 1, 0, bobbleRate);
+    //float noise = noise(cos(i), sin(i));
+    //float r = map(noise, 0, 1, 0, 300);
 
     for (float j = 0; j <= TWO_PI; j += PI/180) {
-      //float noise = map(noise(cos(j),sin(j)),0,1,-maxNoise,maxNoise);
-      //float r = random(i-5,i+5) + noise;
+      float noise = map(noise(cos(j),sin(j)),0,1,-maxNoise,maxNoise);
+      float r = random(i-5,i+5) + noise;
       //float noise = noise(cos(i),sin(i));
     
       float x = r * cos(j); 
@@ -118,7 +118,7 @@ void draw() {
 
       E.vertex(x, y);
     }
-    E.vertex(r*cos(1),r*sin(1));
+    //E.vertex(r*cos(0.1),r*sin(0.1));
     E.endShape();
   }
 }
